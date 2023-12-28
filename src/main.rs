@@ -21,18 +21,18 @@ impl<ParentType, ReturnType> MessageToParent<ParentType, ReturnType> {
 
   ///
   /// Create a new side effect for the parent to run.
-  /// 
+  ///
   /// Note: This is a "stack". The parent will run these in the order they were added.
-  /// 
+  ///
   pub fn add_side_effect(&mut self, new_side_effect: fn(&mut ParentType) -> ReturnType) {
     self.side_effects.push(new_side_effect);
   }
 
   ///
   /// Run all created side effects.
-  /// 
+  ///
   /// Note: Only the parent should be running this after it was received by the child.
-  /// 
+  ///
   pub fn run_side_effects(&mut self, parent: &mut ParentType) {
     for side_effect in &self.side_effects {
       self.results.push(side_effect(parent));
@@ -41,7 +41,7 @@ impl<ParentType, ReturnType> MessageToParent<ParentType, ReturnType> {
 
   ///
   /// Parse the results of the side effects ran on the Parent.
-  /// 
+  ///
   pub fn get_results(&self) -> &Vec<ReturnType> {
     &self.results
   }
@@ -90,9 +90,13 @@ impl Parent {
   pub fn main(&mut self) {
     println!("parent: running mutation on child");
 
-    let mutation_attempt = self.child.as_deref().unwrap().borrow_mut().mutate_parent();
+    let mut mutation_attempt = self.child.as_deref().unwrap().borrow_mut().mutate_parent();
 
-    mutation_attempt.unwrap().run_side_effects(self);
+    mutation_attempt.run_side_effects(self);
+
+    for result in mutation_attempt.get_results() {
+      println!("result: {}", result);
+    }
   }
 
   pub fn parent_mutate_procedure(&mut self) {
@@ -117,17 +121,23 @@ impl Child {
     Rc::new(RefCell::new(Self { parent: None }))
   }
 
-  pub fn mutate_parent(&mut self) -> Option<MessageToParent<Parent, ()>> {
+  pub fn mutate_parent(&mut self) -> MessageToParent<Parent, bool> {
     println!("child: Attempting to mutate parent!");
-    let mut returning_message = MessageToParent::<Parent, ()>::new();
+    let mut returning_message = MessageToParent::<Parent, bool>::new();
 
-    returning_message.add_side_effect(|_| println!("Parental advisory"));
+    returning_message.add_side_effect(|_| {
+      println!("Parental advisory");
+
+      false
+    });
 
     returning_message.add_side_effect(|parent| {
       parent.parent_mutate_procedure();
+
+      true
     });
 
-    Some(returning_message)
+    returning_message
   }
 }
 
