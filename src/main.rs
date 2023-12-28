@@ -88,12 +88,14 @@ impl<ParentType, ReturnType> Drop for MessageToParent<ParentType, ReturnType> {
 
 struct Parent {
   child: Child,
+  is_mutant: bool,
 }
 
 impl Parent {
   pub fn new() -> Self {
     Self {
       child: Child::new(),
+      is_mutant: false,
     }
   }
 
@@ -110,7 +112,7 @@ impl Parent {
   }
 
   pub fn parent_mutate_procedure(&mut self) {
-    println!("parent: I'm a mutant")
+    println!("parent: Am I a mutant? {}", self.is_mutant);
   }
 }
 
@@ -137,6 +139,19 @@ impl Child {
       println!("Parental advisory");
 
       false
+    });
+
+    returning_message.add_side_effect(|parent| {
+      parent.parent_mutate_procedure();
+
+      true
+    });
+
+    returning_message.add_side_effect(|parent| {
+      println!("child: mutating parent!");
+      parent.is_mutant = true;
+
+      parent.is_mutant
     });
 
     returning_message.add_side_effect(|parent| {
