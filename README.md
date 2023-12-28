@@ -1,0 +1,7 @@
+# message_to_parent
+Write your parent struct a set of instructions to execute from the child struct.
+
+
+### nothing to see here yet
+
+Gotta make the rest of the readme, currently converting this from a test implementation into a library.
