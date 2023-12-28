@@ -19,16 +19,29 @@ impl<ParentType, ReturnType> MessageToParent<ParentType, ReturnType> {
     }
   }
 
+  ///
+  /// Create a new side effect for the parent to run.
+  /// 
+  /// Note: This is a "stack". The parent will run these in the order they were added.
+  /// 
   pub fn add_side_effect(&mut self, new_side_effect: fn(&mut ParentType) -> ReturnType) {
     self.side_effects.push(new_side_effect);
   }
 
+  ///
+  /// Run all created side effects.
+  /// 
+  /// Note: Only the parent should be running this after it was received by the child.
+  /// 
   pub fn run_side_effects(&mut self, parent: &mut ParentType) {
     for side_effect in &self.side_effects {
       self.results.push(side_effect(parent));
     }
   }
 
+  ///
+  /// Parse the results of the side effects ran on the Parent.
+  /// 
   pub fn get_results(&self) -> &Vec<ReturnType> {
     &self.results
   }
