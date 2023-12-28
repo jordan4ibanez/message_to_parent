@@ -5,14 +5,7 @@ version = "1.0.0"
 edition = "2021"
 authors = ["jordan4ibanez"]
 license = "GPL-3.0"
-keywords = [
-  "utility",
-  "simple",
-  "structs",
-  "borrowing",
-  "circular",
-  "recursive",
-]
+keywords = ["utility", "simple", "structs", "borrowing", "circular"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
