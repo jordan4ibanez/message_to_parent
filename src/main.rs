@@ -94,12 +94,45 @@ impl<ParentType, ReturnType> MessageToParent<ParentType, ReturnType> {
   }
 
   ///
-  /// Clears out all currently pushed side effects for the MessageToParent.
+  /// Clears out all currently pushed side effects.
   ///
-  /// **Don't use this unless you know what you're doing!**
+  /// This can be used in a logic flow to stop execution of previously pushed
+  /// functions into the "stack".
   ///
-  pub fn clear_side_effects(&mut self) {
+  /// **Don't use this unless you know what you're doing and you really need it!**
+  ///
+  ///! This is a great way to create undebuggable logic flow issues in your program.
+  ///
+  /// For this reason I nicknamed this this use_foot_gattling_gun.
+  ///
+  pub fn __clear_side_effects(&mut self) {
     self.side_effects.clear();
+  }
+
+  ///
+  /// Resets the execution flag, allowing you to execute side effects multiple times.
+  ///
+  /// **Don't use this unless you know what you're doing and you really need it!**
+  ///
+  ///! This is a great way to cause duplicate results to become accumulated.
+  ///
+  /// For this reason I nicknamed this use_foot_rocket_launcher.
+  ///
+  pub fn __allow_reexecution(&mut self) {
+    self.executed = false;
+  }
+
+  ///
+  /// Clears out all currently accumulated results.
+  ///
+  /// **Don't use this unless you know what you're doing and you really need it!**
+  ///
+  ///! This is a great way to cause results to not get parsed by your reactive logic.
+  ///
+  /// For this reason I nicknamed this drop_live_hand_grenade.
+  ///
+  pub fn __clear_results(&mut self) {
+    self.results.clear();
   }
 }
 
