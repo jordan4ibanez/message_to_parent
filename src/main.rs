@@ -127,11 +127,11 @@ impl Parent {
   pub fn main(&mut self) {
     println!("parent: running mutation on child");
 
-    let mut mutation_attempt = self.child.mutate_parent();
+    let mut mutation_instructions = self.child.mutate_parent();
 
-    mutation_attempt.run_side_effects_accumulate_results(self);
+    mutation_instructions.run_side_effects_accumulate_results(self);
 
-    for result in mutation_attempt.get_results() {
+    for result in mutation_instructions.get_results() {
       println!("result: {}", result);
     }
   }
