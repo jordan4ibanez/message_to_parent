@@ -1,5 +1,5 @@
 # message_to_parent
- A simple library for child structs to talk to and interact with their parents without violating the borrow checker. 
+ A simple library for child structs to talk to and interact with their parent without violating the borrow checker. 
 
 This is a hyperactive alternative to message passing and verbose returns.
 
