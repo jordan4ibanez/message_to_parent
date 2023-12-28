@@ -4,6 +4,8 @@ use std::{
   rc::{Rc, Weak},
 };
 
+////////////////////////////////////////////////////////! End Imports
+
 struct Parent {
   child: Option<Rc<RefCell<Child>>>,
 }
@@ -43,6 +45,8 @@ impl Drop for Parent {
   }
 }
 
+////////////////////////////////////////////////////////! End Parent
+
 struct Child {
   parent: Option<Weak<RefCell<Parent>>>,
 }
@@ -71,6 +75,8 @@ impl Drop for Child {
     println!("child dropped!")
   }
 }
+
+////////////////////////////////////////////////////////! End Child
 
 ///
 /// logic flow:
