@@ -8,12 +8,14 @@ use std::{
 
 struct MessageToParent<ParentType, ReturnType> {
   side_effects: Vec<fn(&mut ParentType) -> ReturnType>,
+  results: Vec<ReturnType>,
 }
 
 impl<ParentType, ReturnType> MessageToParent<ParentType, ReturnType> {
   pub fn new() -> Self {
     MessageToParent {
       side_effects: vec![],
+      results: vec![],
     }
   }
 
@@ -21,10 +23,14 @@ impl<ParentType, ReturnType> MessageToParent<ParentType, ReturnType> {
     self.side_effects.push(new_side_effect);
   }
 
-  pub fn run_side_effects(&self, parent: &mut ParentType) {
+  pub fn run_side_effects(&mut self, parent: &mut ParentType) {
     for side_effect in &self.side_effects {
-      side_effect(parent);
+      self.results.push(side_effect(parent));
     }
+  }
+
+  pub fn get_results(&self) -> &Vec<ReturnType> {
+    &self.results
   }
 
   ///
