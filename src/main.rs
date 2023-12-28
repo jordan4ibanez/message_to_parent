@@ -10,6 +10,12 @@ struct Message {
   pub closure: Rc<dyn Fn(&mut Parent)>,
 }
 
+impl Drop for Message {
+  fn drop(&mut self) {
+    println!("Message was dropped!")
+  }
+}
+
 ////////////////////////////////////////////////////////! End Message
 
 struct Parent {
