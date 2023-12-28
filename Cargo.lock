@@ -3,5 +3,5 @@
 version = 3
 
 [[package]]
-name = "micro_example"
-version = "0.1.0"
+name = "message_to_parent"
+version = "1.0.0"
