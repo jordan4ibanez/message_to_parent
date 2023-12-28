@@ -9,6 +9,7 @@ use std::{
 struct MessageToParent<ParentType, ReturnType> {
   side_effects: Vec<fn(&mut ParentType) -> ReturnType>,
   results: Vec<ReturnType>,
+  has_results: bool,
 }
 
 impl<ParentType, ReturnType> MessageToParent<ParentType, ReturnType> {
@@ -16,6 +17,7 @@ impl<ParentType, ReturnType> MessageToParent<ParentType, ReturnType> {
     MessageToParent {
       side_effects: vec![],
       results: vec![],
+      has_results: false,
     }
   }
 
@@ -31,18 +33,42 @@ impl<ParentType, ReturnType> MessageToParent<ParentType, ReturnType> {
   ///
   /// Run all created side effects.
   ///
+  /// This also will accumulate the results in a "stack" which maintains the order that
+  /// the functions were added into the function "stack".
+  ///
+  /// This is slightly slower than run_side_effects due to pushing into the results "stack".
+  ///
   /// Note: Only the parent should be running this after it was received by the child.
   ///
-  pub fn run_side_effects(&mut self, parent: &mut ParentType) {
+  pub fn run_side_effects_accumulate_results(&mut self, parent: &mut ParentType) {
+    self.has_results = true;
     for side_effect in &self.side_effects {
       self.results.push(side_effect(parent));
     }
   }
 
   ///
+  /// Run all created side effects.
+  ///
+  /// Note: Only the parent should be running this after it was received by the child.
+  ///
+  pub fn run_side_effects(&mut self, parent: &mut ParentType) {
+    for side_effect in &self.side_effects {
+      side_effect(parent);
+    }
+  }
+
+  ///
   /// Parse the results of the side effects ran on the Parent.
   ///
+  /// If you do not execute run_side_effects_accumulate_results this will panic
+  /// because you have no results and I'd like for you to know that you made a mistake
+  /// instead of it blindly allowing you to do that. :)
+  ///
   pub fn get_results(&self) -> &Vec<ReturnType> {
+    if !self.has_results {
+      panic!("MessageToParent: You forgot to execute run_side_effects_accumulate_results().");
+    }
     &self.results
   }
 
