@@ -7,7 +7,7 @@ use std::{
 ////////////////////////////////////////////////////////! End Imports
 
 struct MessageToParent<ParentType, ReturnType> {
-  side_effects: Vec<fn(&mut Parent) -> ReturnType>,
+  side_effects: Vec<fn(&mut ParentType) -> ReturnType>,
 }
 
 impl<ParentType, ReturnType> MessageToParent<ParentType, ReturnType> {
