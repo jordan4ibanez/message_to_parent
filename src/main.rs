@@ -161,8 +161,8 @@ impl Drop for Child {
 /// logic flow:
 ///
 /// parent: main()
-/// child: mutate_parent() -> this passes back a Message which contains a closure
-/// parent: closure() -> (contains parent_mutate_procedure execution)
+/// child: mutate_parent() -> this passes back a MessageToParent
+/// parent: runs the message -> (contains parent_mutate_procedure execution)
 /// parent: parent_mutate_procedure()
 fn main() {
   Rc::new(RefCell::new(Parent::new()))
