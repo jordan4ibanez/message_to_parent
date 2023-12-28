@@ -17,7 +17,7 @@ impl<ParentType, ReturnType> MessageToParent<ParentType, ReturnType> {
     }
   }
 
-  pub fn add_side_effect(&mut self, new_side_effect: fn(&mut ParentType)) {
+  pub fn add_side_effect(&mut self, new_side_effect: fn(&mut ParentType) -> ReturnType) {
     self.side_effects.push(new_side_effect);
   }
 
@@ -98,9 +98,9 @@ impl Child {
     Rc::new(RefCell::new(Self { parent: None }))
   }
 
-  pub fn mutate_parent(&mut self) -> Option<MessageToParent> {
+  pub fn mutate_parent(&mut self) -> Option<MessageToParent<Parent, ()>> {
     println!("child: Attempting to mutate parent!");
-    let mut returning_message = MessageToParent::new();
+    let mut returning_message = MessageToParent::<Parent, ()>::new();
 
     returning_message.add_side_effect(|_| println!("Parental advisory"));
 
