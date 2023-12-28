@@ -6,22 +6,22 @@ use std::{
 
 ////////////////////////////////////////////////////////! End Imports
 
-struct MessageToParent {
-  side_effects: Vec<fn(&mut Parent)>,
+struct MessageToParent<ParentType, ReturnType> {
+  side_effects: Vec<fn(&mut Parent) -> ReturnType>,
 }
 
-impl MessageToParent {
+impl<ParentType, ReturnType> MessageToParent<ParentType, ReturnType> {
   pub fn new() -> Self {
     MessageToParent {
       side_effects: vec![],
     }
   }
 
-  pub fn add_side_effect(&mut self, new_side_effect: fn(&mut Parent)) {
+  pub fn add_side_effect(&mut self, new_side_effect: fn(&mut ParentType)) {
     self.side_effects.push(new_side_effect);
   }
 
-  pub fn run_side_effects(&self, parent: &mut Parent) {
+  pub fn run_side_effects(&self, parent: &mut ParentType) {
     for side_effect in &self.side_effects {
       side_effect(parent);
     }
@@ -29,7 +29,7 @@ impl MessageToParent {
 
   ///
   /// Clears out all currently pushed side effects for the Message.
-  /// 
+  ///
   /// **Don't use this unless you know what you're doing!**
   ///
   pub fn clear_side_effects(&mut self) {
@@ -37,7 +37,7 @@ impl MessageToParent {
   }
 }
 
-impl Drop for MessageToParent {
+impl<ParentType, ReturnType> Drop for MessageToParent<ParentType, ReturnType> {
   fn drop(&mut self) {
     println!("Message was dropped!")
   }
