@@ -1,8 +1,6 @@
 # message_to_parent
-Write your parent struct a set of instructions to execute from the child struct.
+ A simple library for child structs to talk to and interact with their parents without violating the borrow checker. 
 
 This is a hyperactive alternative to message passing and verbose returns.
 
-### nothing to see here yet
-
-Gotta make the rest of the readme, currently converting this from a test implementation into a library.
+Please see the [/examples/ folder](https://github.com/jordan4ibanez/message_to_parent/tree/master/examples) for a tutorial on how to use this!
