@@ -1,7 +1,18 @@
 [package]
 name = "message_to_parent"
+description = "A simple library for child structs to talk to and interact with their parent without violating the borrow checker."
 version = "1.0.0"
 edition = "2021"
+authors = ["jordan4ibanez"]
+license = "GPL-3.0"
+keywords = [
+  "utility",
+  "simple",
+  "structs",
+  "borrowing",
+  "circular",
+  "recursive",
+]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
