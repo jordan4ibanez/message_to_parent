@@ -73,7 +73,7 @@ impl<ParentType, ReturnType> MessageToParent<ParentType, ReturnType> {
   }
 
   ///
-  /// Clears out all currently pushed side effects for the Message.
+  /// Clears out all currently pushed side effects for the MessageToParent.
   ///
   /// **Don't use this unless you know what you're doing!**
   ///
@@ -91,34 +91,22 @@ impl<ParentType, ReturnType> Drop for MessageToParent<ParentType, ReturnType> {
 ////////////////////////////////////////////////////////! End MessageToParent
 
 struct Parent {
-  child: Option<Rc<RefCell<Child>>>,
+  child: Child,
 }
 
 impl Parent {
-  pub fn new() -> Rc<RefCell<Self>> {
-    let new_parent = Rc::new(RefCell::new(Self { child: None }));
-
-    new_parent.deref().borrow_mut().child = Some(Child::new());
-
-    new_parent
-      .deref()
-      .borrow_mut()
-      .child
-      .as_ref()
-      .unwrap()
-      .deref()
-      .borrow_mut()
-      .parent = Some(Rc::downgrade(&new_parent.clone()));
-
-    new_parent
+  pub fn new() -> Self {
+    Self {
+      child: Child::new(),
+    }
   }
 
   pub fn main(&mut self) {
     println!("parent: running mutation on child");
 
-    let mut mutation_attempt = self.child.as_deref().unwrap().borrow_mut().mutate_parent();
+    let mut mutation_attempt = self.child.mutate_parent();
 
-    mutation_attempt.run_side_effects(self);
+    mutation_attempt.run_side_effects_accumulate_results(self);
 
     for result in mutation_attempt.get_results() {
       println!("result: {}", result);
@@ -138,13 +126,11 @@ impl Drop for Parent {
 
 ////////////////////////////////////////////////////////! End Parent
 
-struct Child {
-  parent: Option<Weak<RefCell<Parent>>>,
-}
+struct Child {}
 
 impl Child {
-  pub fn new() -> Rc<RefCell<Self>> {
-    Rc::new(RefCell::new(Self { parent: None }))
+  pub fn new() -> Self {
+    Self {}
   }
 
   pub fn mutate_parent(&mut self) -> MessageToParent<Parent, bool> {
@@ -183,5 +169,8 @@ impl Drop for Child {
 /// parent: closure() -> (contains parent_mutate_procedure execution)
 /// parent: parent_mutate_procedure()
 fn main() {
-  Parent::new().deref().borrow_mut().main();
+  Rc::new(RefCell::new(Parent::new()))
+    .deref()
+    .borrow_mut()
+    .main();
 }
