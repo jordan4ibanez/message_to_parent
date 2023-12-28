@@ -99,7 +99,7 @@ impl<ParentType, ReturnType> MessageToParent<ParentType, ReturnType> {
   /// This can be used in a logic flow to stop execution of previously pushed
   /// functions into the "stack".
   ///
-  /// **Don't use this unless you know what you're doing and you really need it!**
+  /// **Don't use this unless you know what you're doing and you actually need it!**
   ///
   ///! This is a great way to create undebuggable logic flow issues in your program.
   ///
@@ -112,7 +112,7 @@ impl<ParentType, ReturnType> MessageToParent<ParentType, ReturnType> {
   ///
   /// Resets the execution flag, allowing you to execute side effects multiple times.
   ///
-  /// **Don't use this unless you know what you're doing and you really need it!**
+  /// **Don't use this unless you know what you're doing and you actually need it!**
   ///
   ///! This is a great way to cause duplicate results to become accumulated.
   ///
@@ -125,7 +125,7 @@ impl<ParentType, ReturnType> MessageToParent<ParentType, ReturnType> {
   ///
   /// Clears out all currently accumulated results.
   ///
-  /// **Don't use this unless you know what you're doing and you really need it!**
+  /// **Don't use this unless you know what you're doing and you actually need it!**
   ///
   ///! This is a great way to cause results to not get parsed by your reactive logic.
   ///
