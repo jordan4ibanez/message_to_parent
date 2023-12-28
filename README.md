@@ -5,7 +5,7 @@ This is a hyperactive alternative to message passing and verbose returns.
 
 Please see the [/examples/ folder](https://github.com/jordan4ibanez/message_to_parent/tree/master/examples) for a tutorial on how to use this!
 
-A small example, taken from [the basic tutorial](https://github.com/jordan4ibanez/message_to_parent/blob/master/examples/basic.rs)
+A small example, taken from [the basic tutorial](https://github.com/jordan4ibanez/message_to_parent/blob/master/examples/basic.rs):
 
 ```rust
 extern crate message_to_parent;
